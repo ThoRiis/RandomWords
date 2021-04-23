@@ -4,4 +4,4 @@ plotly
 matplotlib 
 wordcloud
 streamlit 
-PIL 
+pillow 
