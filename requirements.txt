@@ -6,3 +6,4 @@ wordcloud
 streamlit 
 pillow 
 xlrd
+openpyxl
