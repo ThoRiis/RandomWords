@@ -6,8 +6,10 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 import streamlit as st
+
 from PIL import Image
 
+from utility.colormaps import colormaps
 
 def _max_width_():
         max_width_str = f"max-width: 1000px;"
@@ -37,6 +39,10 @@ mask = np.array(Image.open("masks/mask_bubble.png"))
 df = pd.read_excel('randomWords.xlsx',sheet_name = 'Complete')
 
 
+
+
+st.title("WordCloud Titel")
+st.write("Vælg population")
 
 
 ################################################
@@ -82,12 +88,46 @@ kender_ordet_list= [
 np.NaN]
 
 
-
 kender_ordet = st.multiselect("Hvor godt kender du ordet",kender_ordet_list, default = ['Jeg kender ordet, men bruger det ikke'] )
 
-df_kender = df[(df[col_hvor_ofte].isin(kender_ordet))]
+
+
+koen = st.sidebar.multiselect("Køn",['Mand','Kvinde'], default = ['Mand','Kvinde'] )
+col_koen = 'Hvad er dit køn?'
+
+
+
+
+
+
+
+
+landsdel = ['Nordsjælland', 'Nordjylland', 'Østjylland', 'Sydjylland',
+       'Vest- og sydsjælland', 'København by', 'Københavns omegn',
+       'Sydhavsøerne', 'Vestjylland', 'Bornholm', 'Østsjælland', 'Fyn']
+
+landsdel_selected = st.sidebar.multiselect("Landsdel",options = landsdel, default = landsdel )
+
+col_geo ='Hvilken landsdel kommer du fra?'
+
+
+
+col_alder = 'Hvilken aldersgruppe tilhører du?'
+aldersgrupper = [ '71+ år', '41-50 år', '61-70 år', '31-40 år', '17-20 år',
+       '21-30 år', '51-60 år', '13-16 år']
+
+alder_sel = st.sidebar.multiselect("Landsdel",options = aldersgrupper, default = aldersgrupper )
+
+
+
+df_kender = df[(df[col_hvor_ofte].isin(kender_ordet)) & (df[col_koen].isin(koen))      & (df[col_geo].isin(landsdel_selected))     & (df[col_alder].isin(alder_sel))          ]
 df_sub = df_kender[col_definer]
 text = df_sub.str.cat(sep=' ').lower()
+
+
+
+
+
 
 
 ################################################
@@ -125,11 +165,15 @@ stopwords.update(stopwords_selected)
 ################################################
 
 
-antal_ord = st.sidebar.number_input("Vælg antallet af ord",min_value = 1, value = 10, step = 1, format ="%i" )
+antal_ord = st.sidebar.number_input("Vælg antallet af ord",min_value = 1, value = 100, step = 1, format ="%i" )
 
 
 
 
+
+color = st.sidebar.selectbox("Vælg farvetema", options = colormaps)
+
+baggrundsfarve = st.sidebar.color_picker("vælg baggrundsfarve")
 
 ################################################
 #
@@ -142,7 +186,7 @@ antal_ord = st.sidebar.number_input("Vælg antallet af ord",min_value = 1, value
 
 
 
-wordcloud = WordCloud( stopwords = stopwords, max_words=antal_ord, background_color='rgb(246,246,246)', colormap='Set2',mask = mask, contour_width=1, contour_color='grey').generate(text)
+wordcloud = WordCloud( font_path = 'arial', stopwords = stopwords, max_words=antal_ord, background_color=baggrundsfarve, colormap=color,mask = mask, contour_width=0, contour_color='grey').generate(text)
 fig = plt.figure()
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
@@ -154,9 +198,24 @@ st.sidebar.write("Antal Svar:" + str(len(df_sub))  )
 
 
 
+
+
+    ###############################################################################
+    #
+    # Layout
+    #
+    ###############################################################################
+
+st.title('Fordelingen af antal svar')
+
+
+
+
+filter_hist = st.selectbox("Vælg Filter",options = [col_koen,col_geo,col_alder])
+
 df_nonan = df[df[col_hvor_ofte].notnull()]
 
-fig1 = px.histogram(df_nonan, x=col_hvor_ofte, color = 'Hvilken aldersgruppe tilhører du?')
+fig1 = px.histogram(df_nonan, x=filter_hist, color = col_hvor_ofte )
 fig1['layout'].update(   
             #title = "Distribution of rates for SE home loan", 
             xaxis = dict( 
@@ -178,14 +237,6 @@ fig1['layout'].update(
             )
 
 fig1.update_layout(width=1000,height=600)
-
-    ###############################################################################
-    #
-    # Layout
-    #
-    ###############################################################################
-
-st.title('Fordelingen af antal svar')
 
 st.plotly_chart(fig1)
 
