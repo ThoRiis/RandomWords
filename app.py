@@ -186,7 +186,7 @@ baggrundsfarve = st.sidebar.color_picker("vælg baggrundsfarve")
 
 
 
-wordcloud = WordCloud( font_path = 'Arial Bold', stopwords = stopwords, max_words=antal_ord, background_color=baggrundsfarve, colormap=color,mask = mask, contour_width=0, contour_color='grey').generate(text)
+wordcloud = WordCloud( font_path = 'Arial', stopwords = stopwords, max_words=antal_ord, background_color=baggrundsfarve, colormap=color,mask = mask, contour_width=0, contour_color='grey').generate(text)
 fig = plt.figure()
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
