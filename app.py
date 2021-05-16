@@ -120,7 +120,21 @@ alder_sel = st.sidebar.multiselect("Landsdel",options = aldersgrupper, default =
 
 
 
-df_kender = df[(df[col_hvor_ofte].isin(kender_ordet)) & (df[col_koen].isin(koen))      & (df[col_geo].isin(landsdel_selected))     & (df[col_alder].isin(alder_sel))          ]
+col_udd = 'Højest fuldførte uddannelse'
+udd = [ 
+'Grundskole (folkeskole, friskole, hjemmeskole, privatskole)',
+'10. klasse' ,
+'Gymnasial uddannelse (STX, HHX, HTX, HF)',
+'Erhvervsuddannelse',
+'Kort videregående uddannelse',
+'Mellemlang videregående uddannelse',
+'Lang videregående uddannelse']
+
+alder_sel = st.sidebar.multiselect("Uddannelse",options = udd, default = udd )
+
+
+
+df_kender = df[(df[col_hvor_ofte].isin(kender_ordet)) & (df[col_koen].isin(koen))  & (df[col_udd].isin(alder_sel))    & (df[col_geo].isin(landsdel_selected))     & (df[col_alder].isin(alder_sel))          ]
 df_sub = df_kender[col_definer]
 text = df_sub.str.cat(sep=' ').lower()
 
