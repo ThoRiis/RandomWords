@@ -225,7 +225,7 @@ st.title('Fordelingen af antal svar')
 
 
 
-filter_hist = st.selectbox("Vælg Filter",options = [col_koen,col_geo,col_alder])
+filter_hist = st.selectbox("Vælg Filter",options = [col_koen,col_geo,col_alder,col_udd])
 
 df_nonan = df[df[col_hvor_ofte].notnull()]
 
