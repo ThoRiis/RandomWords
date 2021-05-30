@@ -39,6 +39,9 @@ mask = np.array(Image.open("masks/mask_bubble.png"))
 df = pd.read_excel('randomWords.xlsx',sheet_name = 'Complete')
 
 
+df.rename(columns={"Hvor ofte bruger du ordet 'lurenkig/lurenkig'?"
+: "Hvor ofte bruger du ordet 'lurenkig/lurenkik'?"}, inplace = True)
+
 
 
 st.title("WordCloud Titel")
