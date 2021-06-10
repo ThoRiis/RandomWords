@@ -232,7 +232,7 @@ filter_hist = st.selectbox("Vælg Filter",options = [col_koen,col_geo,col_alder,
 
 df_nonan = df[df[col_hvor_ofte].notnull()]
 
-fig1 = px.histogram(df_nonan, x=filter_hist, color = col_hvor_ofte )
+fig1 = px.histogram(df_nonan, x=filter_hist, color = col_hvor_ofte , barnorm     ='percent')
 fig1['layout'].update(   
             #title = "Distribution of rates for SE home loan", 
             xaxis = dict( 
