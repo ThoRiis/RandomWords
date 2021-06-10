@@ -240,7 +240,7 @@ fig1['layout'].update(
                 categoryorder = 'category ascending',
                 ), 
             yaxis = dict(
-                title = "Antal Svar"),
+                title = "Procent"),
             legend = go.layout.Legend(
                     x=0.96,
                     y=0.99),
